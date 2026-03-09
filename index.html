@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刘汶鑫的主页</title>
+    <style>
+        /* 基础样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; 
+            color: #333; 
+            line-height: 1.6;
+            /* 背景图设置 */
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* 顶部导航栏 */
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 0.8rem 5%;
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .logo-section { display: flex; align-items: center; gap: 15px; }
+        .njust-logo { height: 40px; width: auto; } /* 校徽大小控制 */
+        .user-name { 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            color: #1e88e5; /* 改为优雅的蓝色 */
+            text-shadow: 0 1px 3px rgba(30, 136, 229, 0.2);
+        }
+
+        .contact-info { font-size: 0.95rem; color: #555; }
+
+        /* 欢迎区域 */
+        .hero {
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* 确保在不同背景下文字清晰 */
+            text-align: center;
+        }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 0.5rem; }
+
+        /* 项目列表区域 */
+        .container { max-width: 1100px; margin: -40px auto 60px; padding: 0 20px; }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* 项目卡片 - 优化配色和边框 */
+        .project-card {
+            background: rgba(255, 255, 255, 0.75); /* 更透明，显示背景 */
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(30, 136, 229, 0.15); /* 蓝色调阴影 */
+            border: 2px solid rgba(30, 136, 229, 0.3); /* 蓝色半透明边框 */
+            backdrop-filter: blur(10px); /* 背景模糊效果 */
+        }
+        .project-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(30, 136, 229, 0.3); /* 悬停时蓝色阴影更明显 */
+            background: rgba(255, 255, 255, 0.9); /* 悬停时更不透明 */
+            border-color: rgba(30, 136, 229, 0.6); /* 悬停时边框更明显 */
+        }
+        .card-icon { font-size: 2rem; margin-bottom: 15px; display: block; }
+        .project-card h3 { margin-bottom: 12px; font-size: 1.5rem; color: #1d1d1f; }
+        .project-card p { font-size: 1rem; color: #666; margin-bottom: 20px; }
+        .btn-more { color: #1e88e5; font-weight: bold; } /* 改为蓝色 */
+
+        /* 音乐播放器样式 */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.8);
+            padding: 10px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        footer { text-align: center; padding: 40px; color: white; font-size: 0.9rem; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-section">
+            <img src="njust_logo.png" alt="NJUST Logo" class="njust-logo">
+            <span class="user-name">刘汶鑫的主页</span>
+        </div>
+        <div class="contact-info">
+            📧 联系我：3062033793@qq.com
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>欢迎来到我的数字花园</h1>
+        <p>心有所信，方能行远</p>
+    </div>
+
+    <div class="container">
+        <div class="project-grid">
+            
+            <a href="https://github.com/你的用户名/tools" class="project-card">
+                <span class="card-icon">🛠️</span>
+                <h3>简易工具</h3>
+                <p>这里存放了一些提高效率的小插件和自动化脚本,旨在简化重复性劳动。</p>
+                <span class="btn-more">点击进入 →</span>
+            </a>
+
+            <a href="https://github.com/你的用户名/projects" class="project-card">
+                <span class="card-icon">📚</span>
+                <h3>学习项目</h3>
+                <p>记录我的学术成长路径，包含课程设计、研究课题以及技术实践。 </p>
+                <span class="btn-more">点击进入 →</span>
+            </a>
+
+            <a href="https://github.com/你的用户名/blog" class="project-card">
+                <span class="card-icon">✍️</span>
+                <h3>有感而发</h3>
+                <p>生活随笔、技术心得或是偶尔的感悟。文字是有力量的记录。</p>
+                <span class="btn-more">点击进入 →</span>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="music-player">
+        <span style="margin-right: 10px; font-size: 14px;">🎵 BGM</span>
+        <audio id="bgm" src="bgm.mp3" controls loop style="height: 30px;"></audio>
+    </div>
+
+    <footer>
+        <p>© 2026 刘汶鑫 | 志之所趋，无远弗届</p>
+    </footer>
+
+    <script>
+        // 自动播放提示：现代浏览器通常禁止页面加载后自动播放音频
+        // 用户需要点击一下页面或播放器才能听到声音
+        console.log("网页已加载，点击播放器享受 BGM 吧！");
+    </script>
+</body>
+</html>
