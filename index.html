@@ -148,6 +148,36 @@
             border-color: #1e88e5;
             background: white;
         }
+        .progress-container {
+            width: 100%;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(30, 136, 229, 0.2);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-bar:hover {
+            height: 6px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1e88e5, #42a5f5);
+            width: 0%;
+            transition: width 0.1s linear;
+            border-radius: 2px;
+        }
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #999;
+            margin-top: 3px;
+        }
         .player-controls {
             display: flex;
             align-items: center;
@@ -192,7 +222,7 @@
             <span class="user-name">刘汶鑫的主页</span>
         </div>
         <div class="contact-info">
-            📧 联系我：<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3605060004060505010f057647471855595b">3062033793@qq.com</a>
+            📧 联系我：3062033793@qq.com
         </div>
     </header>
 
@@ -235,7 +265,16 @@
         <select id="songSelect" class="song-select">
             <option value="">请选择歌曲</option>
         </select>
-        <audio id="bgm" loop style="width: 100%; margin-bottom: 5px;"></audio>
+        <audio id="bgm" loop style="display: none;"></audio>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="time-display">
+                <span id="currentTime">0:00</span>
+                <span id="totalTime">0:00</span>
+            </div>
+        </div>
         <div class="player-controls">
             <button class="control-btn" id="prevBtn" title="上一曲">⏮️</button>
             <button class="control-btn" id="playPauseBtn" title="播放/暂停">▶️</button>
@@ -256,10 +295,7 @@
         const songs = [
             '故风吟游之地.mp3',
             '贝加尔湖畔.mp3',
-            // 示例：取消下面的注释并添加你的歌曲
-            // '故风吟游之地.mp3',
-            // '贝加尔湖畔.mp3',
-            // '你的歌曲名.mp3',
+            // 添加更多歌曲...
         ];
         // ==========================================
 
@@ -270,6 +306,10 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const nowPlaying = document.getElementById('nowPlaying');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
 
         let isPlaying = false;
 
@@ -285,13 +325,41 @@
             songs.forEach(song => {
                 const option = document.createElement('option');
                 option.value = song;
-                // 显示名称：去掉.mp3后缀
                 option.text = song.replace('.mp3', '');
                 songSelect.appendChild(option);
             });
 
             nowPlaying.textContent = '共 ' + songs.length + ' 首歌曲';
         }
+
+        // 格式化时间
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressFill.style.width = progress + '%';
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+            totalTimeEl.textContent = formatTime(audio.duration);
+        }
+
+        // 点击进度条跳转
+        progressContainer.addEventListener('click', (e) => {
+            if (!audio.src) return;
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const percent = clickX / width;
+            audio.currentTime = percent * audio.duration;
+        });
+
+        // 监听音频时间更新
+        audio.addEventListener('timeupdate', updateProgress);
 
         // 加载选中的歌曲
         function loadSong() {
@@ -301,7 +369,16 @@
             audio.src = selectedSong;
             const songName = songSelect.options[songSelect.selectedIndex].text;
             nowPlaying.textContent = '当前播放: ' + songName;
+            
+            // 重置进度条
+            progressFill.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
         }
+
+        // 当歌曲加载完成时更新总时长
+        audio.addEventListener('loadedmetadata', () => {
+            totalTimeEl.textContent = formatTime(audio.duration);
+        });
 
         // 播放/暂停
         function togglePlayPause() {
@@ -323,7 +400,7 @@
 
         // 上一曲
         function playPrevious() {
-            if (songSelect.selectedIndex > 1) { // >1 因为第一个是"请选择"
+            if (songSelect.selectedIndex > 1) {
                 songSelect.selectedIndex--;
                 loadSong();
                 if (isPlaying) {
@@ -337,7 +414,7 @@
             if (songSelect.selectedIndex < songSelect.options.length - 1) {
                 songSelect.selectedIndex++;
             } else {
-                songSelect.selectedIndex = 1; // 循环到第一首歌（跳过"请选择"）
+                songSelect.selectedIndex = 1;
             }
             loadSong();
             if (isPlaying) {
@@ -363,8 +440,6 @@
         // 页面加载时初始化播放列表
         initPlaylist();
 
-        console.log("音乐播放器已就绪！在代码的 songs 数组中添加你的.mp3文件名");
-
         // ==========================================
         // 拖动功能
         // ==========================================
@@ -387,8 +462,11 @@
         document.addEventListener('touchend', dragEnd);
 
         function dragStart(e) {
-            // 如果点击的是按钮或选择框，不触发拖动
-            if (e.target.closest('.control-btn') || e.target.closest('.song-select') || e.target.closest('audio')) {
+            // 如果点击的是按钮、选择框或进度条，不触发拖动
+            if (e.target.closest('.control-btn') || 
+                e.target.closest('.song-select') || 
+                e.target.closest('audio') ||
+                e.target.closest('.progress-container')) {
                 return;
             }
 
@@ -432,3 +510,5 @@
             el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
         }
     </script>
+</body>
+</html>
