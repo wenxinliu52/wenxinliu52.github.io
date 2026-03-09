@@ -105,13 +105,76 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: rgba(255,255,255,0.8);
-            padding: 10px;
-            border-radius: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.9);
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.2);
+            border: 2px solid rgba(30, 136, 229, 0.3);
+            z-index: 1000;
+            min-width: 320px;
+            backdrop-filter: blur(10px);
+        }
+        .player-header {
             display: flex;
             align-items: center;
-            z-index: 1000;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .player-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e88e5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .song-select {
+            width: 100%;
+            padding: 6px 12px;
+            border: 1px solid rgba(30, 136, 229, 0.3);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            outline: none;
+            margin-bottom: 10px;
+        }
+        .song-select:hover {
+            border-color: #1e88e5;
+            background: white;
+        }
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .control-btn {
+            background: rgba(30, 136, 229, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .control-btn:hover {
+            background: rgba(30, 136, 229, 0.2);
+            transform: scale(1.1);
+        }
+        .now-playing {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         footer { text-align: center; padding: 40px; color: white; font-size: 0.9rem; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
@@ -162,13 +225,137 @@
     </div>
 
     <div class="music-player">
-        <span style="margin-right: 10px; font-size: 14px;">🎵 BGM</span>
-        <audio id="bgm" src="bgm.mp3" controls loop style="height: 30px;"></audio>
+        <div class="player-header">
+            <span class="player-title">🎵 音乐播放器</span>
+        </div>
+        <select id="songSelect" class="song-select">
+            <option value="">请选择歌曲</option>
+        </select>
+        <audio id="bgm" loop style="width: 100%; margin-bottom: 5px;"></audio>
+        <div class="player-controls">
+            <button class="control-btn" id="prevBtn" title="上一曲">⏮️</button>
+            <button class="control-btn" id="playPauseBtn" title="播放/暂停">▶️</button>
+            <button class="control-btn" id="nextBtn" title="下一曲">⏭️</button>
+        </div>
+        <div class="now-playing" id="nowPlaying">请添加.mp3文件到目录</div>
     </div>
 
     <footer>
         <p>© 2026 刘汶鑫 | 志之所趋，无远弗届</p>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // 自动播放提示：现代浏
+    <script>
+        // ==========================================
+        // 在这里添加你的.mp3文件名
+        // 只需将文件名添加到下面的数组中即可
+        // ==========================================
+        const songs = [
+            // 示例：取消下面的注释并添加你的歌曲
+            // '故风吟游之地.mp3',
+            // '贝加尔湖畔.mp3',
+            // '你的歌曲名.mp3',
+        ];
+        // ==========================================
+
+        // 音乐播放器控制
+        const audio = document.getElementById('bgm');
+        const songSelect = document.getElementById('songSelect');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const nowPlaying = document.getElementById('nowPlaying');
+
+        let isPlaying = false;
+
+        // 初始化歌单
+        function initPlaylist() {
+            songSelect.innerHTML = '<option value="">请选择歌曲</option>';
+            
+            if (songs.length === 0) {
+                nowPlaying.textContent = '请在代码中添加.mp3文件名';
+                return;
+            }
+
+            songs.forEach(song => {
+                const option = document.createElement('option');
+                option.value = song;
+                // 显示名称：去掉.mp3后缀
+                option.text = song.replace('.mp3', '');
+                songSelect.appendChild(option);
+            });
+
+            nowPlaying.textContent = '共 ' + songs.length + ' 首歌曲';
+        }
+
+        // 加载选中的歌曲
+        function loadSong() {
+            const selectedSong = songSelect.value;
+            if (!selectedSong) return;
+            
+            audio.src = selectedSong;
+            const songName = songSelect.options[songSelect.selectedIndex].text;
+            nowPlaying.textContent = '当前播放: ' + songName;
+        }
+
+        // 播放/暂停
+        function togglePlayPause() {
+            if (!songSelect.value) {
+                alert('请先选择一首歌曲');
+                return;
+            }
+
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.textContent = '▶️';
+                isPlaying = false;
+            } else {
+                audio.play();
+                playPauseBtn.textContent = '⏸️';
+                isPlaying = true;
+            }
+        }
+
+        // 上一曲
+        function playPrevious() {
+            if (songSelect.selectedIndex > 1) { // >1 因为第一个是"请选择"
+                songSelect.selectedIndex--;
+                loadSong();
+                if (isPlaying) {
+                    audio.play();
+                }
+            }
+        }
+
+        // 下一曲
+        function playNext() {
+            if (songSelect.selectedIndex < songSelect.options.length - 1) {
+                songSelect.selectedIndex++;
+            } else {
+                songSelect.selectedIndex = 1; // 循环到第一首歌（跳过"请选择"）
+            }
+            loadSong();
+            if (isPlaying) {
+                audio.play();
+            }
+        }
+
+        // 事件监听
+        songSelect.addEventListener('change', () => {
+            loadSong();
+            if (isPlaying) {
+                audio.play();
+            }
+        });
+
+        playPauseBtn.addEventListener('click', togglePlayPause);
+        prevBtn.addEventListener('click', playPrevious);
+        nextBtn.addEventListener('click', playNext);
+
+        // 歌曲播放结束后自动播放下一曲
+        audio.addEventListener('ended', playNext);
+
+        // 页面加载时初始化播放列表
+        initPlaylist();
+
+        console.log("音乐播放器已就绪！在代码的 songs 数组中添加你的.mp3文件名");
+    </script>
