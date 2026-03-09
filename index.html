@@ -113,12 +113,15 @@
             z-index: 1000;
             min-width: 260px;
             backdrop-filter: blur(10px);
+            cursor: move;
+            user-select: none;
         }
         .player-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 8px;
+            cursor: move;
         }
         .player-title {
             font-size: 13px;
@@ -175,6 +178,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            cursor: move;
         }
 
         footer { text-align: center; padding: 40px; color: white; font-size: 0.9rem; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
@@ -358,4 +362,71 @@
         initPlaylist();
 
         console.log("音乐播放器已就绪！在代码的 songs 数组中添加你的.mp3文件名");
+
+        // ==========================================
+        // 拖动功能
+        // ==========================================
+        const musicPlayer = document.querySelector('.music-player');
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        musicPlayer.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        // 触摸设备支持
+        musicPlayer.addEventListener('touchstart', dragStart);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('touchend', dragEnd);
+
+        function dragStart(e) {
+            // 如果点击的是按钮或选择框，不触发拖动
+            if (e.target.closest('.control-btn') || e.target.closest('.song-select') || e.target.closest('audio')) {
+                return;
+            }
+
+            if (e.type === 'touchstart') {
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            } else {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+            }
+
+            isDragging = true;
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, musicPlayer);
+            }
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+        }
     </script>
