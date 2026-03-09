@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有感而发 - 刘汶鑫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e88e5;
+            --text-primary: #2c3e50;
+            --text-secondary: #546e7a;
+            --bg-light: #fafbfc;
+            --border-color: rgba(30, 136, 229, 0.15);
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(to bottom, #f8f9fa 0%, #e8f4f8 100%);
+            color: var(--text-primary);
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* 返回链接 */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .back-link:hover {
+            background: white;
+            transform: translateX(-5px);
+            box-shadow: 0 4px 12px rgba(30, 136, 229, 0.15);
+        }
+
+        /* 页面标题 */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #1e88e5, #42a5f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        /* 文章容器 */
+        .posts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        /* 文章卡片 */
+        .post {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .post:hover {
+            box-shadow: 0 8px 32px rgba(30, 136, 229, 0.2);
+            transform: translateY(-4px);
+        }
+
+        /* 文章头部（含图片） */
+        .post-header {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .post:hover .post-image {
+            transform: scale(1.05);
+        }
+
+        /* 文章元信息覆盖层 */
+        .post-meta-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            padding: 30px;
+            color: white;
+        }
+
+        .post-date {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .post-title-overlay {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: white;
+        }
+
+        /* 文章内容区 */
+        .post-content {
+            padding: 35px;
+        }
+
+        /* 无图片文章的标题 */
+        .post-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .post-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .post-text {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .post-text p {
+            margin-bottom: 1.2em;
+        }
+
+        .post-text img {
+            width: 100%;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 引用样式 */
+        .post-text blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+            margin: 25px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            background: rgba(30, 136, 229, 0.05);
+            padding: 20px 20px 20px 25px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* 标签 */
+        .post-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .tag {
+            padding: 5px 15px;
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.1), rgba(66, 165, 245, 0.1));
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'Noto Sans SC', sans-serif;
+            border: 1px solid rgba(30, 136, 229, 0.2);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .post-image {
+                height: 250px;
+            }
+
+            .post-title {
+                font-size: 1.5rem;
+            }
+
+            .post-content {
+                padding: 25px;
+            }
+        }
+
+        /* 空状态提示 */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">
+            ← 返回主页
+        </a>
+
+        <div class="page-header">
+            <h1>有感而发</h1>
+            <p>生活随笔 · 技术心得 · 偶尔的感悟</p>
+        </div>
+
+        <div class="posts-container">
+            
+            <!-- ========================================== -->
+            <!-- 文章示例1: 带图片的文章 -->
+            <!-- ========================================== -->
+            <article class="post">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200" alt="山脉风景" class="post-image">
+                    <div class="post-meta-overlay">
+                        <div class="post-date">2026年3月10日</div>
+                        <h2 class="post-title-overlay">关于成长的一些思考</h2>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">
+                        <p>人生就像一场漫长的旅行，我们都是匆匆过客。在这个过程中，我们会遇到各种各样的风景，有美好的，也有不那么美好的。但正是这些经历，塑造了我们独特的人生。</p>
+                        
+                        <p>最近在读《活着》，余华先生用最朴实的文字讲述了一个人的一生。生活的苦难并没有击垮福贵，反而让他更加珍惜活着本身。这让我深深地感受到，生命的意义或许就在于经历本身。</p>
+                        
+                        <blockquote>
+                            "人是为了活着本身而活着，而不是为了活着之外的任何事物而活着。" —— 余华
+                        </blockquote>
+                        
+                        <p>在技术的道路上也是如此。每一次调试代码到深夜，每一次项目deadline的压力，都是成长的养分。重要的不是终点，而是沿途的风景和经历。</p>
+                    </div>
+                    <div class="post-tags">
+                        <span class="tag">人生感悟</span>
+                        <span class="tag">读书笔记</span>
+                        <span class="tag">成长</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 文章示例2: 无图片的文章 -->
+            <!-- ========================================== -->
+            <article class="post">
+                <div class="post-content">
+                    <h2 class="post-title">我的第一个开源项目</h2>
+                    <div class="post-meta">2026年3月8日</div>
+                    <div class="post-text">
+                        <p>今天终于把电子邮件群发器的第一个版本推送到了GitHub。虽然功能还很简单，但这是我真正意义上的第一个开源项目。</p>
+                        
+                        <p>在开发过程中遇到了很多问题，从最开始的邮件协议理解，到后来的异常处理，每一步都充满了挑战。但正是这些挑战，让我对Python和SMTP有了更深入的理解。</p>
+                        
+                        <p>开源不仅仅是代码的分享，更是知识和经验的传递。希望这个小工具能帮助到有需要的人。</p>
+                    </div>
+                    <div class="post-tags">
+                        <span class="tag">技术分享</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">开源</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ========================================== -->
+            <!-- 添加新文章说明 -->
+            <!-- ========================================== -->
+            <!-- 
+            要添加新文章，复制以下模板并修改内容：
+
+            方式1: 带图片的文章
+            <article class="post">
+                <div class="post-header">
+                    <img src="图片链接或本地路径" alt="图片描述" class="post-image">
+                    <div class="post-meta-overlay">
+                        <div class="post-date">日期</div>
+                        <h2 class="post-title-overlay">文章标题</h2>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">
+                        <p>文章内容段落1</p>
+                        <p>文章内容段落2</p>
+                        <blockquote>引用内容（可选）</blockquote>
+                        <img src="文章内图片" alt="描述">
+                    </div>
+                    <div class="post-tags">
+                        <span class="tag">标签1</span>
+                        <span class="tag">标签2</span>
+                    </div>
+                </div>
+            </article>
+
+            方式2: 无图片的文章
+            <article class="post">
+                <div class="post-content">
+                    <h2 class="post-title">文章标题</h2>
+                    <div class="post-meta">日期</div>
+                    <div class="post-text">
+                        <p>文章内容...</p>
+                    </div>
+                    <div class="post-tags">
+                        <span class="tag">标签</span>
+                    </div>
+                </div>
+            </article>
+            -->
+
+        </div>
+    </div>
+
+    <script>
+        // 文章卡片入场动画
+        document.addEventListener('DOMContentLoaded', () => {
+            const posts = document.querySelectorAll('.post');
+            posts.forEach((post, index) => {
+                post.style.opacity = '0';
+                post.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    post.style.transition = 'all 0.6s ease';
+                    post.style.opacity = '1';
+                    post.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>
