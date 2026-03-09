@@ -48,10 +48,26 @@
             justify-content: center;
             align-items: center;
             color: white;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* 确保在不同背景下文字清晰 */
             text-align: center;
         }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 0.5rem; }
+        .hero h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 0.5rem; 
+            text-shadow: 
+                0 2px 10px rgba(0,0,0,0.5),
+                -1px -1px 0 rgba(255,255,255,0.3),
+                1px -1px 0 rgba(255,255,255,0.3),
+                -1px 1px 0 rgba(255,255,255,0.3),
+                1px 1px 0 rgba(255,255,255,0.3); /* 添加淡白色轮廓 */
+        }
+        .hero p {
+            text-shadow: 
+                0 2px 10px rgba(0,0,0,0.5),
+                -1px -1px 0 rgba(255,255,255,0.3),
+                1px -1px 0 rgba(255,255,255,0.3),
+                -1px 1px 0 rgba(255,255,255,0.3),
+                1px 1px 0 rgba(255,255,255,0.3); /* 添加淡白色轮廓 */
+        }
 
         /* 项目列表区域 */
         .container { max-width: 1100px; margin: -40px auto 60px; padding: 0 20px; }
@@ -63,7 +79,7 @@
 
         /* 项目卡片 - 优化配色和边框 */
         .project-card {
-            background: rgba(255, 255, 255, 0.75); /* 更透明，显示背景 */
+            background: rgba(255, 255, 255, 0.5); /* 提高透明度，更好显示背景 */
             border-radius: 20px;
             padding: 30px;
             text-decoration: none;
@@ -76,7 +92,7 @@
         .project-card:hover {
             transform: translateY(-12px);
             box-shadow: 0 20px 40px rgba(30, 136, 229, 0.3); /* 悬停时蓝色阴影更明显 */
-            background: rgba(255, 255, 255, 0.9); /* 悬停时更不透明 */
+            background: rgba(255, 255, 255, 0.7); /* 悬停时稍微不透明一些 */
             border-color: rgba(30, 136, 229, 0.6); /* 悬停时边框更明显 */
         }
         .card-icon { font-size: 2rem; margin-bottom: 15px; display: block; }
@@ -109,7 +125,7 @@
             <span class="user-name">刘汶鑫的主页</span>
         </div>
         <div class="contact-info">
-            📧 联系我：3062033793@qq.com
+            📧 联系我：<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3605060004060505010f057647471855595b">[email&#160;protected]</a>
         </div>
     </header>
 
@@ -154,10 +170,5 @@
         <p>© 2026 刘汶鑫 | 志之所趋，无远弗届</p>
     </footer>
 
-    <script>
-        // 自动播放提示：现代浏览器通常禁止页面加载后自动播放音频
-        // 用户需要点击一下页面或播放器才能听到声音
-        console.log("网页已加载，点击播放器享受 BGM 吧！");
-    </script>
-</body>
-</html>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // 自动播放提示：现代浏
