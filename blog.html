@@ -224,33 +224,76 @@
             border: 1px solid rgba(30, 136, 229, 0.2);
         }
 
-        /* 删除按钮 */
-        .delete-btn {
+        /* 优化后的删除按钮 - 始终显示在管理模式 */
+        .post-actions {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(244, 67, 54, 0.9);
+            display: none;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        body.admin-mode .post-actions {
+            display: flex;
+        }
+
+        .delete-btn {
+            background: rgba(244, 67, 54, 0.95);
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
             cursor: pointer;
-            display: none;
+            display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
             transition: all 0.3s ease;
-            z-index: 10;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
         }
 
         .delete-btn:hover {
             background: #d32f2f;
-            transform: scale(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
         }
 
-        body.admin-mode .delete-btn {
-            display: flex;
+        .delete-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 管理模式提示 */
+        .admin-mode-indicator {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(244, 67, 54, 0.95);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: 'Noto Sans SC', sans-serif;
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+            z-index: 99;
+            animation: pulse 2s infinite;
+        }
+
+        body.admin-mode .admin-mode-indicator {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
         }
 
         /* 管理面板 */
@@ -466,6 +509,13 @@
             .admin-form {
                 padding: 25px;
             }
+
+            .admin-mode-indicator {
+                bottom: 20px;
+                right: 20px;
+                font-size: 0.85rem;
+                padding: 10px 16px;
+            }
         }
     </style>
 </head>
@@ -484,6 +534,11 @@
         </div>
 
         <div class="posts-container" id="postsContainer"></div>
+    </div>
+
+    <!-- 管理模式指示器 -->
+    <div class="admin-mode-indicator">
+        🔧 管理模式已开启
     </div>
 
     <!-- 管理面板 -->
@@ -597,7 +652,11 @@
                 if (post.coverImage) {
                     return `
                         <article class="post">
-                            <button class="delete-btn" onclick="deletePost(${post.id})">×</button>
+                            <div class="post-actions">
+                                <button class="delete-btn" onclick="deletePost(${post.id})">
+                                    🗑️ 删除
+                                </button>
+                            </div>
                             <div class="post-header">
                                 <img src="${post.coverImage}" alt="${post.title}" class="post-image">
                                 <div class="post-meta-overlay">
@@ -614,7 +673,11 @@
                 } else {
                     return `
                         <article class="post">
-                            <button class="delete-btn" onclick="deletePost(${post.id})">×</button>
+                            <div class="post-actions">
+                                <button class="delete-btn" onclick="deletePost(${post.id})">
+                                    🗑️ 删除
+                                </button>
+                            </div>
                             <div class="post-content">
                                 <h2 class="post-title">${post.title}</h2>
                                 <div class="post-meta">${formatDate(post.date)}</div>
